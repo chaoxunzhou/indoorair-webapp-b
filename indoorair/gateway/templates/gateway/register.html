@@ -1,0 +1,42 @@
+<!-- register/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+<title>IndoorAir | Register</title>
+</head>
+<body>
+    <script>
+        {% include "gateway/register.js" %}
+    </script>
+
+    <h1>Register</h1>
+    <p>
+    First Name:
+    <input id="first_name" name="first_name" type="text"></input>
+    </p>
+
+    <p>
+    Last Name:
+    <input id="last_name" name="last_name" type="text"></input>
+    </p>
+
+    <p>
+    Email:
+    <input id="email" name="email" type="text"></input>
+    </p>
+
+    <p>
+    Username:
+    <input id="username" name="username" type="text"></input>
+    </p>
+
+    <p>
+    Password:
+    <input id="password" name="password" type="password"></input>
+    </p>
+
+    <p>
+    <button type="button" onclick="onRegisterClick()">Submit</button>
+    </p>
+</body>
+</html>

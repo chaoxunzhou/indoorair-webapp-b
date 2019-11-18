@@ -1,0 +1,31 @@
+<!-- homepage/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+<title>IndoorAir | Instruments</title>
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+</head>
+<body>
+    <script>
+        {% include "instrument/list.js" %}
+    </script>
+
+    <h1>Instruments List</h1>
+
+    <!-- STEP 1: Create a `table` HTML element and attacch `id` to it. --->
+    <table style="width:100%" id="instruments_list">
+    </table>
+
+    <p>
+        <button type="button" onclick="onCreateClick()">Create Instrument</button>
+    </p>
+    <p>
+        <button type="button" onclick="onBackClick()">Back</button>
+    </p>
+
+</body>
+</html>
