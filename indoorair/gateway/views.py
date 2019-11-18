@@ -1,93 +1,79 @@
-"""
-gateway/views.py
-"""
 from django.http import HttpResponse, JsonResponse
 # from django.contrib.auth.models import User
-from django.shortcuts import render # STEP 1 - Import
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User # STEP 1: Import the user
 from django.contrib.auth import authenticate, login, logout
-from gateway.serializers import RegisterApiSrializers
+from rest_framework import status, response, views
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+
+from gateway.serializers import LoginSerializer, RegisterSerializer
+
 
 def register_page(request):
-    return render(request, "gateway/register.html", {})
+   return render(request, "gateway/register.html", {})
 
 
-def register_success_page(request):
-    return render(request, "gateway/register_success.html", {})
+class AccountRegisterAPI(views.APIView):
+
+    def post(self, request):
+        serializer = RegisterSerializer(data = request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return response.Response(
+            status = status.HTTP_201_CREATED,
+            data = serializer.data,
+        )
+
+# http --form POST http://127.0.0.1:8000/api/register username=ydang5 password=123 first_name=yi last_name=dang email=y@y.com
+
+
+def register_ok_page(request):
+    return render(request, "gateway/register_ok_page.html",{})
 
 
 def login_page(request):
-    return render(request, "gateway/login.html", {})
+   user = request.user
+   return render(request, "gateway/login.html", {})
 
-class RegisterApi(views.APIViews):
+
+class AccountLoginAPI(views.APIView):
     def post(self, request):
-        serializer = RegisterSerializer(data = request.data)
-        serializer.is_valid(raise_exception =True)
-        serializer.save()
+
+        login_serializer = LoginSerializer(data = request.data,context={
+            'request':request,
+        })
+        login_serializer.is_valid(raise_exception=True)
+        login_serializer.save()
+
         return response.Response(
             status=status.HTTP_201_CREATED,
-            data={
-            'message':"Your account is created, plz login"
-        }
-        )
+            data = {
+                    'message': 'Login successfully.',
+                })
 
-
-def post_login_api(request):
-    username = request.POST.get("username")
-    password = request.POST.get("password")
-
-    print("For debugging purposes", username, password)
-
-    try:
-        user = authenticate(username=username, password=password)
-        if user:
-            print("PRE-LOGIN", user.get_full_name())
-            login(request, user)
-            print("POST-LOGIN", user.get_full_name())
-
-            # A backend authenticated the credentials
-            return JsonResponse({
-                 "was_logged_in": True,
-                 "reason": None,
-            })
-        else:
-            # No backend authenticated the credentials
-            return JsonResponse({
-                 "was_logged_in": False,
-                 "reason": "Cannot log in, username or password is wrong.",
-            })
-
-    except Exception as e:
-        print(e)
-        return JsonResponse({
-             "was_successful": False,
-             "reason": "Cannot log in, username or password is wrong.",
-        })
-
-
+# http --session=user1 --form POST http://127.0.0.1:8000/api/login username="ydang5" password="123"
 
 def logout_page(request):
-    # STEP 2 - Do something w/ models.
-    # ...
-
-    # STEP 3 - Do something w/ context.
-    # ..
-
-    # STEP 4 - Use the `render` function.
-    return render(request, "gateway/logout.html", {})
+   user = request.user
+   return render(request, "gateway/logout.html", {})
 
 
-def post_logout_api(request):
-    try:
-        logout(request)
-        return JsonResponse({
-             "was_logged_out": True,
-             "reason": None,
+class AccountLogoutAPI(views.APIView):
+    def post(self, request):
+        if request.user.is_authenticated:
+            logout(request)
+            return response.Response(
+            status=status.HTTP_200_OK,
+            data = {
+                'message': 'You have been logged out',
+            })
+
+        else:
+            return response.Response(
+            status=status.HTTP_401_UNAUTHORIZED,
+            data = {
+                'message': 'Please login first',
         })
-    except Exception as e:
-        print(e)
-        return JsonResponse({
-             "was_logged_out": False,
-             "reason": str(e),
-        })
+# http --session=user1 --form POST http://127.0.0.1:8000/api/logout
+# Error message: TypeError: 'type' object is not iterable

@@ -1,27 +1,23 @@
-<!-- register/index.html -->
 <!DOCTYPE html>
 <html>
 <head>
-<title>IndoorAir | Login</title>
+<title>indoorair</title>
 </head>
 <body>
-    <script>
-        {% include "gateway/login.js" %}
-    </script>
+  <script>
+    {% include "gateway/login.js" %}
+  </script>
 
-    <h1>Login</h1>
-    <p>
-    Username:
-    <input id="username" name="username" type="text"></input>
-    </p>
+<h1>Login</h1>
+Username:
+<input id = "username" name = "username" type = "text"> </input>
+<p>
+</p>
+Password:
+<input id="password" name = "password" type = "password"> </input>
+<p>
+</p>
+  <button type="button" onclick ="onLoginClick()">Login</button>
 
-    <p>
-    Password:
-    <input id="password" name="password" type="password"></input>
-    </p>
-
-    <p>
-    <button type="button" onclick="onLoginClick()">Submit</button>
-    </p>
 </body>
 </html>

@@ -1,26 +1,24 @@
-function onLoginClick() {
-    const password = document.getElementById("password").value;
-    const username = document.getElementById("username").value;
+function onLoginClick(){
+  const usernameElement = document.getElementById("username");
+  const username = usernameElement.value;
+  console.log(username)
+  const passwordElement = document.getElementById('password');
+  const password = passwordElement.value;
+  console.log(password);
 
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) { // Thisis the callback function
-            // Get the string data that the server sent us.
-            const resultString = this.responseText;
-
-            // Create an object which converts the string to an object using JSON parsing.
-            var resultObject = JSON.parse(resultString);
-
-            // Please note, "was_logged_in" is a key set by the server.
-            if (resultObject.was_logged_in === false) {
-                alert(resultObject.reason);
-            } else {
-                window.location.href = "/dashboard";
-            }
-        }
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function(){
+    if(this.readyState == 4 && this.status == 200){
+      const loginObject = JSON.parse(this.responseText);
+      if(loginObject.was_successful === true){
+        window.location.href = "/dashboard";
+      }else{
+        alert(loginObject.reason)
+      }
     }
-
-    xhttp.open("POST", "{% url 'login_api' %}", true);
-    xhttp.setRequestHeader("content-type", "application/x-www-form-urlencoded");
-    xhttp.send("username="+username+"&password="+password);
+  }
+  xhttp.open("POST","/api/login", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  const string = "username=" + username+"&password=" +password
+  xhttp.send(string)
 }

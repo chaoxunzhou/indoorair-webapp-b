@@ -1,11 +1,12 @@
-"""
-instrument/views.py
-"""
 from django.http import HttpResponse, JsonResponse
 # from django.contrib.auth.models import User
 from django.shortcuts import render # STEP 1 - Import
 from django.shortcuts import redirect
-from foundations.models import Instrument
+from rest_framework import status, views, response
+from django.shortcuts import get_object_or_404
+
+from foundation.models import Instrument
+from instrument.serializers import InstrumentSerializer
 
 
 def i_list_page(request):
@@ -15,35 +16,26 @@ def i_create_page(request):
     return render(request, "instrument/create.html", {})
 
 
-def get_instruments_list_api(request):
-    instruments = Instrument.objects.filter(user=request.user)
-    output = []
-    for instrument in instruments.all():
-        output.append({
-            'id': instrument.id,
-            'name': instrument.name,
-        })
-    return JsonResponse({
-        'instruments': output
-    })
+class InstrumentListAPIView(views.APIView):
+    def get(self,request):
+        instruments = Instrument.objects.filter(user=request.user).values('name','location','serial_number')
 
-def post_instruments_create_api(request):
-    name = request.POST.get("name")
-    print(name)
-    try:
-        instrument = Instrument.objects.create(
-            name=name,
-            user=request.user
+        return response.Response(
+            status=status.HTTP_200_OK,
+            data={
+                'instrument list: ': instruments,
+            }
+    )
+
+class InstrumentCeateAPI(views.APIView):
+    def post(self ,request):
+        serializer = InstrumentSerializer(data = request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return response.Response(
+            status = status.HTTP_201_CREATED,
+            data = serializer.data,
         )
-        print("INSTRUMENT ID", instrument.id)
-        return JsonResponse({
-         'was_created': True,
-        })
-    except Exception as e:
-        return JsonResponse({
-         'was_created': False,
-         'reason': str(e),
-        })
 
 
 def i_retrieve_page(request, id):
@@ -51,37 +43,35 @@ def i_retrieve_page(request, id):
         "instrument_id": int(id),
     })
 
-def i_retrieve_api(request, id):
-    try:
-        instrument = Instrument.objects.get(id=int(id))
-        return JsonResponse({
-            'was_found': True,
-            'id': instrument.id,
-            'name': instrument.name,
-        })
-    except Exception as e:
-        return JsonResponse({
-         'was_found': False,
-        })
 
 def i_update_page(request, id):
     return render(request, "instrument/update.html", {
         "instrument_id": int(id),
     })
 
-def i_update_api(request, id):
-    try:
-        name = request.POST.get("name")
-        instrument = Instrument.objects.get(id=int(id))
-        instrument.name = name
-        instrument.save()
-        return JsonResponse({
-            'was_found': True,
-            'id': instrument.id,
-            'name': instrument.name,
-        })
-    except Exception as e:
-        print(e)
-        return JsonResponse({
-         'was_found': False,
-        })
+
+class InstrumentRetrieveUpdateAPI(views.APIView):
+    def get_object(self,id):
+        return get_object_or_404(Instrument, id=id)
+
+
+    def get(self, request, id):
+        object = self.get_object(id)
+        serializer = InstrumentSerializer(object, many=False)
+        return response.Response(
+            status = status.HTTP_200_OK,
+            data = serializer.data,
+        )
+
+
+    def put(self, request, id):
+        object = self.get_object(id)
+        serializer = InstrumentSerializer(object, data=request.data, many=False)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+
+        return response.Response(
+            status = status.HTTP_200_OK,
+            data = serializer.data,
+        )

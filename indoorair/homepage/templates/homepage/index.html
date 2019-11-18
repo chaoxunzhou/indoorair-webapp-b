@@ -1,29 +1,33 @@
-<!-- homepage/index.html -->
 <!DOCTYPE html>
 <html>
 <head>
-<title>IndoorAir | Home</title>
+<h>Indoorair Homepage</h>
 </head>
 <body>
-    <script>
-        {% include "homepage/index.js" %}
-    </script>
+  <script>
+    {% include "homepage/index.js" %}
+  </script>
 
-    <h1>IndoorAir</h1>
-    <p>Welcome to IndoorAir, we montior the quality of the air you breath indoors!</p>
-    <p>
-        <button type="button" onclick="onLoginClick()">Login</button>
-    </p>
-    <p>
-        <button type="button" onclick="onRegisterClick()">Register</button>
-    </p>
-    <p>
-        <button type="button" onclick="onContactClick()">Contact</button>
-    </p>
-    <p>
-        <button type="button" onclick="onGetVersionClick()">Get Version</button>
-    </p>
-    Version:<p id="getVersionId">---</p>
+<p>
 
+  <button type="button" onclick ="onLoginClick()">Login</button>
+
+</p>
+<p>
+
+  <button type="button" onclick = "onRegisterClick()">Register</button>
+
+</p>
+<br />
+<br />
+
+
+  <button type = "button" onclick = "onContactClick()">Contact</button>
+<p>
+
+  <button type="button" onclick = "onVersionClick()">Version</button>
+
+</p>
+<p id=getVersion></p>
 </body>
 </html>

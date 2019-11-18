@@ -1,5 +1,5 @@
 function onCreateClick() {
-    window.location.href = "{% url 'i_create_page' %}";
+    window.location.href = "{% url 'instrument_create_page' %}";
 }
 
 function onBackClick() {

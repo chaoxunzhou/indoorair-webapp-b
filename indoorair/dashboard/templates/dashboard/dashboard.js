@@ -5,11 +5,11 @@ function onPageLoadGetDashboardAPI() {
             const dataString = this.responseText;
             const dataObj = JSON.parse(dataString);
 
-            document.getElementById("avg_temperature").innerHTML = dataObj.temperature;
-            document.getElementById("avg_pressure").innerHTML = dataObj.pressure;
-            document.getElementById("avg_co2").innerHTML = dataObj.co2;
-            document.getElementById("avg_tvoc").innerHTML = dataObj.tvoc;
-            document.getElementById("avg_humidity").innerHTML = dataObj.humidity;
+            document.getElementById("avg_temperature").innerHTML = dataObj.temperature_sensor;
+            document.getElementById("avg_pressure").innerHTML = dataObj.pressure_sensor;
+            document.getElementById("avg_co2").innerHTML = dataObj.CO2_sensor;
+            document.getElementById("avg_tvoc").innerHTML = dataObj.TVOC_Sensor;
+            document.getElementById("avg_humidity").innerHTML = dataObj.humidity_sensor;
         }
     }
     xhttp.open("GET","api/dashboard", true);

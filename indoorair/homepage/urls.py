@@ -1,12 +1,11 @@
-"""
-homepage/urls.py
-"""
 from django.urls import path
-
-from . import views
+from rest_framework.urlpatterns import format_suffix_patterns
+from homepage import views
 
 urlpatterns = [
-    path('', views.index_page, name='index_page'),
-    path('contact', views.contact_page, name='contact_page'),
-    path('api/version', views.get_version_api, name='version_api'),
+    path('', views.index_page, name='index'),
+    path('contact', views.contact_page,name='contact'),
+    path('api/version', views.GetVersion.as_view()),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

@@ -1,6 +1,6 @@
 function generateViewFromObject(dataObj) {
     if (dataObj.was_found === false) {
-        alert("Sorry we could not find that instrument!");
+        alert("Sorry we could not find that sensor!");
         onBackClick();
     } else {
         var idInputElement = document.getElementById("id");
@@ -19,24 +19,16 @@ function onPageLoadRunGetInstrumentDetailsFromAPI(instrument_id) {
             generateViewFromObject(dataObj);
         }
     }
-    const detailURL = "/api/instrument/"+instrument_id.toString();
+    const detailURL = "/api/sensor/"+instrument_id.toString();
     console.log(detailURL);
     xhttp.open("GET", detailURL, true);
     xhttp.send();
 }
 
-const instrument_id = {{ instrument_id }};
-onPageLoadRunGetInstrumentDetailsFromAPI(instrument_id);
+const sensor_id = {{ sensor_id }};
+onPageLoadRunGetInstrumentDetailsFromAPI(sensor_id);
 
 
 function onBackClick() {
-    window.location.href = "{% url 'i_list_page' %}";
-}
-
-function onUpdateClick() {
-    window.location.href = "{% url 'i_update_page' instrument_id %}";
-}
-
-function showSensorClick() {
-    window.location.href = "{% url 'sensor_retrieve_page' sensor_id %}";
+    window.location.href = "{% url 'i_retrieve_page' %}";
 }
